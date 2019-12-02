@@ -1,5 +1,5 @@
 const { readFileSync } = require('fs')
-const { mask } = require('ip')
+const { mask, address } = require('ip')
 const crypto = require('crypto')
 
 
@@ -7,7 +7,10 @@ const Utils = {
   loadConfig: () => {
     const config = {
       routes: [],
-      local: {}
+      local: {
+        ip: address(),
+        mask: '255.255.255.0'
+      }
     }
     
     try {
@@ -25,28 +28,40 @@ const Utils = {
 
   extractFromPacket: (field, packet) => {
     switch (field) {
-      case 'destination_ip':
-          const [destinationIp, destinationPort] = packet.split('||')[2].split('\n')[1].split(':')
-          return destinationIp || ''
+      case 'destination_ip': {
+        const [destinationIp, destinationPort] = packet.split('||')[2].split('\n')[1].split(':')
+        return destinationIp || ''
         break
-      case 'destination_port':
-          const [destinationIp, destinationPort] = packet.split('||')[2].split('\n')[1].split(':')
-          return destinationPort || ''
+      }
+      case 'destination_port': {
+        const [destinationIp, destinationPort] = packet.split('||')[2].split('\n')[1].split(':')
+        return destinationPort || ''
         break
+      }
+      case 'origin_port': {
+        const [somenthing, originPort, somenthing2] = packet.split('||')[1].split('|')
+        return originPort
+      }
       default:
     }
   },
 
   extractFromEthPacket: (field, packet) => {
     switch (field) {
-      case 'destination_ip':
-          const [originIp, originPort, destinationIp, destinationPort] = str.split('||')[1].split('|')
-          return destinationIp || ''
+      case 'destination_ip': {
+        const [originIp, originPort, destinationIp, destinationPort] = str.split('||')[1].split('|')
+        return destinationIp || ''
         break
-      case 'destination_port':
-          const [originIp, originPort, destinationIp, destinationPort] = str.split('||')[1].split('|')
-          return destinationPort || ''
+      }
+      case 'destination_port': {
+        const [originIp, originPort, destinationIp, destinationPort] = str.split('||')[1].split('|')
+        return destinationPort || ''
         break
+      }
+      case 'origin_port': {
+        const [somenthing, originPort, somenthing2] = packet.split('||')[1].split('|')
+        return originPort
+      }
       default:
     }
   },

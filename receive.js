@@ -22,9 +22,9 @@ function receiveNetworkPacket () {
     saveAndPushUp(packet)
   } else {
     // decide next hop ip
-    const nextHop = config.default
+    let nextHop = config.default
 
-    if (!isLocal(config.local.ip, config.local.mask, destinationIp)) {
+    if (isLocal(config.local.ip, config.local.mask, destinationIp)) {
       nextHop = `${destinationIp}:${destinationPort}`
     } else {
       for (const route in config.routes) {
@@ -53,9 +53,11 @@ function saveAndPushUp (originalPacket) {
 }
 
 function saveAndResendPacket (originalPacket, nextHop) {
-  const nextHop =  nextHop.split(':')
+  nextHop =  nextHop.split(':')
+  const originIp = extractFromEthPacket('origin_ip', originalPacket)
+  const originPort = extractFromEthPacket('origin_port', originalPacket)
   const packetCheckSum = checkSum(originalPacket)
-  let networkHeader = `||${local.ip}|${local.port}|${nextHop[0]}|${nextHop[1]}|${originalPacket}||`
+  let networkHeader = `||${originIp}|${nextHop[0]}|${originalPacket}||`
   const finalPacket = `${networkHeader}${originalPacket}`
 
   writeFileSync('../pacotes/pdu_rede.txt', finalPacket)
