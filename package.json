@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=. node index.js"
+    "send": "NODE_PATH=. node index.js",
+    "receive": "NODE_PATH=. node "
   },
   "keywords": [],
   "author": "",

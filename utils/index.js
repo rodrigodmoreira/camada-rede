@@ -5,7 +5,7 @@ const Utils = {
   loadConfig: () => {
     const config = {
       routes: [],
-      origin: {}
+      local: {}
     }
     
     try {
@@ -13,7 +13,7 @@ const Utils = {
     
       config.routes = savedConfig.routes || config.routes
       config.default = savedConfig.default
-      config.origin = savedConfig.origin || config.origin
+      config.local = savedConfig.local || config.local
     } catch (err) {
       console.log(err)
     }
@@ -22,7 +22,31 @@ const Utils = {
   },
 
   extractFromPacket: (field, packet) => {
-    return '0.0.0.0:0'
+    switch (field) {
+      case 'destination_ip':
+          const [destinationIp, destinationPort] = packet.split('||')[2].split('\n')[1].split(':')
+          return destinationIp || ''
+        break
+      case 'destination_port':
+          const [destinationIp, destinationPort] = packet.split('||')[2].split('\n')[1].split(':')
+          return destinationPort || ''
+        break
+      default:
+    }
+  },
+
+  extractFromEthPacket: (field, packet) => {
+    switch (field) {
+      case 'destination_ip':
+          const [originIp, originPort, destinationIp, destinationPort] = str.split('||')[1].split('|')
+          return destinationIp || ''
+        break
+      case 'destination_port':
+          const [originIp, originPort, destinationIp, destinationPort] = str.split('||')[1].split('|')
+          return destinationPort || ''
+        break
+      default:
+    }
   },
 
   isLocal: (originIp, originMask, destinationIp) => {
