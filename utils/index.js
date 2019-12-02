@@ -1,5 +1,7 @@
 const { readFileSync } = require('fs')
 const { mask } = require('ip')
+const crypto = require('crypto')
+
 
 const Utils = {
   loadConfig: () => {
@@ -51,6 +53,13 @@ const Utils = {
 
   isLocal: (originIp, originMask, destinationIp) => {
     return mask(originIp, originMask) === mask(destinationIp, originMask)
+  },
+
+  checksum: (str, algorithm, encoding) => {
+    return crypto
+      .createHash(algorithm || 'md5')
+      .update(str, 'utf8')
+      .digest(encoding || 'hex')
   }
 }
 

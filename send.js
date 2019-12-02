@@ -1,7 +1,7 @@
 const { readFileSync, writeFileSync } = require('fs')
 const { execSync } = require('child_process')
 
-const { loadConfig, extractFromPacket, isLocal } = require('utils')
+const { loadConfig, extractFromPacket, isLocal, checkSum } = require('utils')
 
 /**
  * args
@@ -17,7 +17,7 @@ function sendNetworkPacket () {
 
     const destinationIp = extractFromPacket('destination_ip', packet)
     const destinationPort = extractFromPacket('destination_port', packet)
-    
+
     // decide next hop ip
     const nextHop = config.default
 
@@ -38,8 +38,9 @@ function sendNetworkPacket () {
 }
 
 function saveAndSendPacket (originalPacket, nextHop) {
-  nextHop =  nextHop.split(':')
-  let networkHeader = `||${local.ip}|${local.port}|${nextHop[0]}|${nextHop[1]}||`
+  const nextHop = nextHop.split(':')
+  const packetCheckSum = checkSum(originalPacket)
+  let networkHeader = `||${local.ip}|${local.port}|${nextHop[0]}|${nextHop[1]}|${packetCheckSum}||`
   const finalPacket = `${networkHeader}${originalPacket}`
 
   writeFileSync('../pacotes/pdu_rede.txt', finalPacket)
