@@ -24,7 +24,10 @@ function receiveNetworkPacket () {
     // decide next hop ip
     let nextHop = config.default
 
-    if (isLocal(config.local.ip, config.local.mask, destinationIp)) {
+    const originIp = extractFromEthPacket('origin_ip', originalPacket)
+    const originMask = extractFromEthPacket('origin_mask', originalPacket)
+
+    if (isLocal(originIp, originMask, destinationIp)) {
       nextHop = destinationIp
     } else {
       for (const route in config.routes) {
