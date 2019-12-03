@@ -15,7 +15,6 @@ function receiveNetworkPacket () {
   const packet = readFileSync(args[0]).toString()
 
   const destinationIp = extractFromEthPacket('destination_ip', packet)
-  const destinationPort = extractFromEthPacket('destination_port', packet)
   
   if (config.local.ip === destinationIp) {
     // save packet file and call transport layer

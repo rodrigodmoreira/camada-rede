@@ -16,13 +16,12 @@ function sendNetworkPacket () {
     const packet = readFileSync(path).toString()
 
     const destinationIp = extractFromPacket('destination_ip', packet)
-    const destinationPort = extractFromPacket('destination_port', packet)
 
     // decide next hop ip
     let nextHop = config.default
 
     if (isLocal(config.local.ip, config.local.mask, destinationIp)) {
-      nextHop = `${destinationIp}:${destinationPort}`
+      nextHop = `${destinationIp}`
     } else {
       for (const route in config.routes) {
         if (config.routes[route].includes(destinationIp)) {
@@ -38,10 +37,8 @@ function sendNetworkPacket () {
 }
 
 function saveAndSendPacket (originalPacket, nextHop) {
-  nextHop = nextHop.split(':')
-  const originPort = extractFromPacket('origin_port', originalPacket)
   const packetCheckSum = checksum(originalPacket)
-  let networkHeader = `||${config.local.ip}|${nextHop[0]}|${packetCheckSum}||`
+  let networkHeader = `||${config.local.ip}|${nextHop}|${packetCheckSum}||`
   const finalPacket = `${networkHeader}${originalPacket}`
 
   writeFileSync('../pacotes/pdu_rede.txt', finalPacket)

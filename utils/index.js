@@ -47,17 +47,24 @@ const Utils = {
   },
 
   extractFromEthPacket: (field, packet) => {
-    const [originIp, destinationIp, checksum] = packet.split('||')[1].split('|')
     switch (field) {
       case 'origin_ip': {
+        const [originIp, destinationIp, checksum] = packet.split('||')[1].split('|')
         return originIp || ''
         break
       }
       case 'destination_ip': {
+        const [originIp, destinationIp, checksum] = packet.split('||')[1].split('|')
+        return destinationIp || ''
+        break
+      }
+      case 'final_destination_ip': {
+        const [destinationIp, destinationPort] = packet.split('||')[4].split('\n')[1].split(':')
         return destinationIp || ''
         break
       }
       case 'checksum': {
+        const [originIp, destinationIp, checksum] = packet.split('||')[1].split('|')
         return checksum || ''
         break
       }
