@@ -54,9 +54,8 @@ function saveAndPushUp (originalPacket) {
 
 function saveAndResendPacket (originalPacket, nextHop) {
   const originIp = extractFromEthPacket('origin_ip', originalPacket)
-  const originMask = extractFromEthPacket('origin_mask', originalPacket)
   const packetCheckSum = extractFromEthPacket('checksum', originalPacket)
-  let networkHeader = `||${originIp}|${nextHop}|${packetCheckSum}|${originMask}||`
+  let networkHeader = `||${originIp}|${nextHop}|${packetCheckSum}||`
   const finalPacket = `${networkHeader}${originalPacket}`
 
   writeFileSync('../pacotes/pdu_rede.txt', finalPacket)
