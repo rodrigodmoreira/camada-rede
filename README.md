@@ -26,7 +26,7 @@ Como resultado, a camada de rede escreve um pacote (também TXT/ASCII) sem seu h
 ### Formato do cabeçalho
 O formato do cabeçalho segue n
 o seguinte formato:
-||ip_origem|ip_destino|checksum|origem_mascara||
+||ip_origem|ip_destino|checksum||
 Com os IPs e checksum separados por barras únicas e o início e fim do pacote demarcados por barras duplas.
 
 ## Algoritmo
