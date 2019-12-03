@@ -41,7 +41,7 @@ function saveAndSendPacket (originalPacket, nextHop) {
   nextHop = nextHop.split(':')
   const originPort = extractFromPacket('origin_port', originalPacket)
   const packetCheckSum = checksum(originalPacket)
-  let networkHeader = `||${config.local.ip}|${nextHop[0]}|${packetCheckSum}||`
+  let networkHeader = `||${config.local.ip}|${nextHop[0]}|${packetCheckSum}|${config.local.mask}||`
   const finalPacket = `${networkHeader}${originalPacket}`
 
   writeFileSync('../pacotes/pdu_rede.txt', finalPacket)

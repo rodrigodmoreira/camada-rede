@@ -47,7 +47,7 @@ const Utils = {
   },
 
   extractFromEthPacket: (field, packet) => {
-    const [originIp, destinationIp, checksum] = packet.split('||')[1].split('|')
+    const [originIp, destinationIp, checksum, mask] = packet.split('||')[1].split('|')
     switch (field) {
       case 'origin_ip': {
         return originIp || ''
@@ -59,6 +59,10 @@ const Utils = {
       }
       case 'checksum': {
         return checksum || ''
+        break
+      }
+      case 'origin_mask': {
+        return mask || ''
         break
       }
       default:
